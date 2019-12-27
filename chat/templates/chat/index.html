@@ -1,0 +1,16 @@
+<!-- chat/templates/chat/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Branch Support</title>
+</head>
+<body>
+    {% load crispy_forms_tags %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <button id="chat-submit" type="submit" class="btn btn-black">Start chat</button>
+    </form>
+</body>
+</html>
