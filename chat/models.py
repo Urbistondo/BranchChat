@@ -42,8 +42,9 @@ class Ticket(models.Model):
 class Message(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(User, null=False, editable=False, on_delete=models.CASCADE)
+    body = models.TextField(max_length=500)
     ticket = models.ForeignKey(Ticket, null=False, editable=False, on_delete=models.CASCADE)
-    body = models.TextField()
+
     sent_at = models.DateTimeField(auto_now_add=True, null=False)
 
     def __str__(self):
