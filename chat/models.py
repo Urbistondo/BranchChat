@@ -25,7 +25,7 @@ class Ticket(models.Model):
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    agent = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
+    agent = models.ForeignKey(User, default=None, null=True, on_delete=models.CASCADE)
     has_disconnected = models.BooleanField(default=False, null=False)
     category = models.TextField(max_length=140, choices=CATEGORY, default=CATEGORY.undetermined, null=False)
     priority = models.PositiveIntegerField(default=50, null=False)
@@ -33,7 +33,7 @@ class Ticket(models.Model):
     subject = models.TextField(max_length=140, null=False)
 
     created_at = models.DateTimeField(auto_now_add=True, null=False)
-    updated_at = models.DateTimeField(auto_now_add=True, null=False)
+    updated_at = models.DateTimeField(auto_now=True, null=False)
 
     def __str__(self):
         return '%s - %s -%s' % (self.id, self.category, self.status)
