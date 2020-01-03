@@ -36,7 +36,7 @@ class Ticket(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=False)
 
     def __str__(self):
-        return '%s - %s -%s' % (self.id, self.category, self.status)
+        return self.id
 
 
 class Message(models.Model):
@@ -48,4 +48,4 @@ class Message(models.Model):
     sent_at = models.DateTimeField(auto_now_add=True, null=False)
 
     def __str__(self):
-        return '%s - %s -%s' % (self.author, self.ticket, self.sent_at)
+        return '%s - %s - %s' % (self.author, self.ticket.id, self.sent_at)

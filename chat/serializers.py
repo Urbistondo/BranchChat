@@ -6,8 +6,18 @@ from .models import Ticket, Message
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
-        fields = '__all__'
-        read_only_fields = ('id', 'createdAt', 'subject')
+        fields = (
+            'id',
+            'agent',
+            'has_disconnected',
+            'category',
+            'priority',
+            'status',
+            'subject',
+            'created_at',
+            'updated_at',
+        )
+        read_only_fields = ('id', 'created_at', 'subject')
 
     def update(self, instance, validated_data):
         instance.agent = validated_data.get('agent', instance.agent)
@@ -25,5 +35,11 @@ class TicketSerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = '__all__'
-        read_only_fields = '__all__'
+        fields = (
+            'id',
+            'author',
+            'body',
+            'ticket',
+            'sent_at',
+        )
+        read_only_fields = ('id', 'author', 'body', 'ticket', 'sent_at')
