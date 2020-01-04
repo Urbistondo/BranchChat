@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 
-from .models import Message, Ticket
-from .serializers import MessageSerializer, TicketSerializer
+from chat.models import Message, Ticket
+from chat.serializers import MessageSerializer, TicketSerializer
 
 
 class TicketViewSet(ModelViewSet):

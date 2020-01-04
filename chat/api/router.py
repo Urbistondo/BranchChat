@@ -1,6 +1,6 @@
 from rest_framework_nested import routers
 
-from .viewsets import MessageViewSet, TicketViewSet
+from chat.api.viewsets import MessageViewSet, TicketViewSet
 
 
 router = routers.SimpleRouter(trailing_slash=False)
