@@ -35,8 +35,8 @@ class Ticket(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=False)
     updated_at = models.DateTimeField(auto_now=True, null=False)
 
-    def __str__(self):
-        return self.id
+    # def __str__(self):
+    #     return self.id
 
 
 class Message(models.Model):
@@ -47,5 +47,9 @@ class Message(models.Model):
 
     sent_at = models.DateTimeField(auto_now_add=True, null=False)
 
-    def __str__(self):
-        return '%s - %s - %s' % (self.author, self.ticket.id, self.sent_at)
+    # def __str__(self):
+    #     return '%s - %s - %s' % (self.author, self.ticket, self.sent_at)
+
+    @staticmethod
+    def last_10_messages():
+        return Message.objects.order_by('-sent_at').all()[:10]
