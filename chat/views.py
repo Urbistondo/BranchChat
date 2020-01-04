@@ -20,9 +20,9 @@ def index(request):
     return render(request, 'chat/index.html', {})
 
 
-def room(request, room_name):
-    return render(request, 'chat/room.html', {
-        'room_name_json': mark_safe(json.dumps(room_name))
+def ticket(request, ticket_id):
+    return render(request, 'chat/ticket.html', {
+        'ticket_id_json': mark_safe(json.dumps(ticket_id))
     })
 
 # API views

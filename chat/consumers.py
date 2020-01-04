@@ -13,9 +13,10 @@ User = get_user_model()
 class ChatConsumer(WebsocketConsumer):
     def fetch_messages(self, data):
         ticket = Ticket.objects.get(id=data['data']['ticket_id'])
-        messages = ticket.message_set.all()
+        messages = ticket.message_set.all().order_by('-sent_at')[:10]
         content = {
-            'messages': self.messages_to_json(messages)
+            'messages': self.messages_to_json(messages),
+            'command': 'messages'
         }
         self.send_message(content)
 
@@ -57,15 +58,13 @@ class ChatConsumer(WebsocketConsumer):
     def connect(self):
         # Obtains the 'room_name' parameter from the URL route in chat/routing.py that opened the WebSocket connection to the consumer.
         # Every consumer has a scope that contains information about its connection, including in particular any positional or keyword arguments from the URL route and the currently authenticated user if any.
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-
         # Constructs a Channels group name directly from the user-specified room name, without any quoting or escaping.
         # Group names may only contain letters, digits, hyphens, and periods. Therefore this example code will fail on room names that have other characters.
-        self.room_group_name = 'chat_%s' % self.room_name
+        self.ticket_id = 'chat_%s' % self.scope['url_route']['kwargs']['ticket_id']
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name,
+            self.ticket_id,
             self.channel_name
         )
 
@@ -74,7 +73,7 @@ class ChatConsumer(WebsocketConsumer):
     def disconnect(self, close_code):
         # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
-            self.room_group_name,
+            self.ticket_id,
             self.channel_name
         )
 
@@ -86,7 +85,7 @@ class ChatConsumer(WebsocketConsumer):
     def send_chat_message(self, message):
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
+            self.ticket_id,
             {
                 'type': 'chat_message',
                 'message': message
@@ -100,7 +99,8 @@ class ChatConsumer(WebsocketConsumer):
     def chat_message(self, event):
         message = event['message']
         content = {
-            'messages': [message]
+            'messages': [message],
+            'command': 'new_message'
         }
 
         # Send message to WebSocket
