@@ -20,8 +20,14 @@
 
     chatSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
+        console.log(data);
         var messages = data['messages'];
-        messages.forEach(appendToTextBox);
+        if (messages.length === 1) {
+            document.querySelector('#chat-log').value += (messages[0].body + '\n');
+        }
+        else {
+            messages.forEach(appendToTextBox);
+        }
 
         function appendToTextBox(message) {
             document.querySelector('#chat-log').value += (message.body + '\n');
