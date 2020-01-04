@@ -11,12 +11,12 @@ User = get_user_model()
 
 class ChatConsumer(WebsocketConsumer):
     def fetch_messages(self, data):
-        messages = Message.last_10_messages()
+        ticket = Ticket.objects.get(id=data['data']['ticket_id'])
+        messages = ticket.message_set.all()
         content = {
             'messages': self.messages_to_json(messages)
         }
-
-        self.send_chat_message(content)
+        self.send_message(content)
 
     def new_message(self, data):
         serializer = MessageSerializer(data=data['message'])
@@ -42,10 +42,10 @@ class ChatConsumer(WebsocketConsumer):
     @staticmethod
     def message_to_json(message):
         return {
-            'ticket_id': message.ticket_id,
+            'ticket_id': str(message.ticket_id),
             'author_id': message.author_id,
             'body': message.body,
-            'sent_at': message.sent_at,
+            'sent_at': str(message.sent_at),
         }
 
     commands = {

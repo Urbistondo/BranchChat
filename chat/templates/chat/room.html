@@ -20,8 +20,20 @@
 
     chatSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
-        var message = data['message'];
-        document.querySelector('#chat-log').value += (message + '\n');
+        var messages = data['messages'];
+        messages.forEach(appendToTextBox);
+
+        function appendToTextBox(message) {
+            document.querySelector('#chat-log').value += (message.body + '\n');
+        }
+    };
+
+    chatSocket.onopen = function(e) {
+        var data = {'ticket_id': roomName};
+        chatSocket.send(JSON.stringify({
+            'data': data,
+            'command': 'fetch_messages'
+        }));
     };
 
     chatSocket.onclose = function(e) {
@@ -42,7 +54,6 @@
             'author_id': 1,
             'ticket_id': roomName,
             'body': body,
-            'sent_at': 'Now biatch',
         };
         chatSocket.send(JSON.stringify({
             'message': message,
