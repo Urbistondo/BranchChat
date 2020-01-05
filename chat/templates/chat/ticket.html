@@ -78,7 +78,12 @@
     <div class="content">
       <div class="contact-profile">
         <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-        <p>{{ username }}</p>
+          <div id="user-info" class="content">
+            <p>{{ user }}</p>
+            </div>
+        <div class="actions">
+            <button id="resolve" type="button" class="btn btn-primary">Resolve</button>
+        </div>
         <div class="social-media">
           <i class="fa fa-facebook" aria-hidden="true"></i>
           <i class="fa fa-twitter" aria-hidden="true"></i>
@@ -110,6 +115,7 @@
   </div>
 
 <script src="{% static 'main.js' %}"></script>
+<script type="text/javascript" src="date.js"></script>
 <script src="{% static 'reconnecting-websocket.js' %}"></script>
 <script>
     function fetchMessages(ticketId) {
@@ -123,17 +129,23 @@
     function createMessage(data) {
         var author_id = data['author_id'];
         var msgListTag = document.createElement('li');
+        {#var namePTag = document.createElement('p');#}
+        var timestampPTag = document.createElement('p');
         var imgTag = document.createElement('img');
         var pTag = document.createElement('p');
+        {#namePTag.textContent = data['author_username'];#}
+        timestampPTag.textContent = data['sent_at'];
         pTag.textContent = data['body'];
         imgTag.src = 'http://emilcarlsson.se/assets/mikeross.png';
 
-        if (author_id !== 1) {
+        if (author_id !== {{ user.id }}) {
             msgListTag.className = 'sent';
         } else {
             msgListTag.className = 'replies';
         }
 
+        msgListTag.appendChild(timestampPTag);
+        {#msgListTag.appendChild(namePTag);#}
         msgListTag.appendChild(imgTag);
         msgListTag.appendChild(pTag);
         document.querySelector('#chat-log').appendChild(msgListTag);
@@ -175,7 +187,7 @@
         var messageInputDom = document.querySelector('#chat-message-input');
         var body = messageInputDom.value;
         var message = {
-            'author_id': 1,
+            'author_id': {{ user.id }},
             'ticket_id': ticketId,
             'body': body,
         };

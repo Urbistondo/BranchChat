@@ -27,12 +27,13 @@ class ChatConsumer(WebsocketConsumer):
             author = User.objects.get(id=data['message']['author_id'])
             message = serializer.save(author=author, ticket=ticket, body=data['message']['body'])
 
-        # content = {
-        #     'command': 'new_message',
-        #     'message': self.message_to_json(message)
-        # }
+            # content = {
+            #     'messages': [self.message_to_json(message)],
+            #     'command': 'new_message'
+            # }
 
-        return self.send_chat_message(self.message_to_json(message))
+            self.send_chat_message(self.message_to_json(message))
+            # self.send_message(content)
 
     def messages_to_json(self, messages):
         result = []

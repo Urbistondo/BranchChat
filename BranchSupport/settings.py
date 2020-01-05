@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'channels',
     'crispy_forms',
+    'filters',
     'rest_framework',
     'rest_framework_nested',
 

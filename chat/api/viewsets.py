@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
-from rest_framework import status
+from filters.mixins import FiltersMixin
+from rest_framework import filters, status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -8,9 +9,23 @@ from chat.models import Message, Ticket
 from chat.serializers import MessageSerializer, TicketSerializer
 
 
-class TicketViewSet(ModelViewSet):
+class TicketViewSet(FiltersMixin, ModelViewSet):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('agent', 'category', 'priority')
+    ordering = ('category',)
+
+    # add a mapping of query_params to db_columns(queries)
+    filter_mappings = {
+        'agent': 'agent_id',
+        'category': 'category',
+        'priority': 'priority',
+    }
+
+    filter_value_transformations = {
+        'agent': lambda val: val if val != 'null' else None  # cm to ft
+    }
 
 
 class MessageViewSet(ModelViewSet):
