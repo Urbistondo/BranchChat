@@ -1,6 +1,10 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from .models import Ticket, Message
+
+
+User = get_user_model()
 
 
 class TicketSerializer(serializers.ModelSerializer):
@@ -8,7 +12,8 @@ class TicketSerializer(serializers.ModelSerializer):
         model = Ticket
         fields = (
             'id',
-            'agent',
+            'user_id',
+            'agent_id',
             'has_disconnected',
             'category',
             'priority',
@@ -20,6 +25,7 @@ class TicketSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created_at', 'subject')
 
     def update(self, instance, validated_data):
+        instance.user = validated_data.get('user', instance.user)
         instance.agent = validated_data.get('agent', instance.agent)
         instance.has_disconnected = validated_data.get('has_disconnected', instance.has_disconnected)
         instance.category = validated_data.get('category', instance.category)

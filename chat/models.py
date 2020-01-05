@@ -25,7 +25,8 @@ class Ticket(models.Model):
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    agent = models.ForeignKey(User, default=None, null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=False, on_delete=models.CASCADE, related_name='user')
+    agent = models.ForeignKey(User, default=None, null=True, on_delete=models.CASCADE, related_name='agent')
     has_disconnected = models.BooleanField(default=False, null=False)
     category = models.TextField(max_length=140, choices=CATEGORY, default=CATEGORY.undetermined, null=False)
     priority = models.PositiveIntegerField(default=50, null=False)

@@ -18,7 +18,8 @@
     "react-scroll-to-bottom": "^1.3.2"
   },
   "dependencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react": ">=15",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2"
   }
 }

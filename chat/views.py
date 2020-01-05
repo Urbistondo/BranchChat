@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.http import Http404, JsonResponse
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
@@ -16,14 +17,24 @@ from .serializers import MessageSerializer, TicketSerializer
 from django.shortcuts import render
 
 
+User = get_user_model()
+
+
 def index(request):
     return render(request, 'chat/index.html', {})
 
 
 def ticket(request, ticket_id):
-    return render(request, 'chat/ticket.html', {
-        'ticket_id_json': mark_safe(json.dumps(ticket_id))
-    })
+    ticket = Ticket.objects.get(id=ticket_id)
+    user = User.objects.get(id=ticket.user_id)
+
+    context = {
+        'user_first_name': user.first_name,
+        'user_last_name': user.last_name,
+        'ticket_id_json': mark_safe(json.dumps(ticket_id)),
+    }
+
+    return render(request, 'chat/ticket.html', context)
 
 # API views
 # class TicketList(ListCreateAPIView):

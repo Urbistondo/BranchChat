@@ -17,6 +17,7 @@
   </head>
 
 <body>
+{% csrf_token %}
   <div id="frame">
     <div id="sidepanel">
       <div id="profile">
@@ -79,27 +80,15 @@
       <div class="contact-profile">
         <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
           <div id="user-info" class="content">
-            <p>{{ user }}</p>
+            <p>{{ user_first_name }} {{ user_last_name }}</p>
             </div>
         <div class="actions">
-            <button id="resolve" type="button" class="btn btn-primary">Resolve</button>
-        </div>
-        <div class="social-media">
-          <i class="fa fa-facebook" aria-hidden="true"></i>
-          <i class="fa fa-twitter" aria-hidden="true"></i>
-          <i class="fa fa-instagram" aria-hidden="true"></i>
+            <button id="resolve" type="button" class="btn btn-primary" onclick="resolve();">Resolve</button>
         </div>
       </div>
       <div class="messages">
         <ul id="chat-log">
-          {% comment %} <li class="sent">
-            <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-            <p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
-          </li>
-          <li class="replies">
-            <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-            <p>When you're backed against the wall, break the god damn thing down.</p>
-          </li> {% endcomment %}
+
         </ul>
       </div>
       <div class="message-input">
@@ -117,7 +106,26 @@
 <script src="{% static 'main.js' %}"></script>
 <script type="text/javascript" src="date.js"></script>
 <script src="{% static 'reconnecting-websocket.js' %}"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.json.org/json2.js"></script>
 <script>
+    function resolve () {
+        var myData = {
+            csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+            status: 'resolved'
+        };
+
+        $.ajax({
+            type : 'PUT',
+            url: 'http://127.0.0.1:8000/api/chat/tickets/14fcbfa0-1712-4c11-9649-bd7ceaba432b',
+            data: myData
+        });
+    }
+
+    function minutesAgo(timestamp) {
+        return Math.round((new Date().getTime() - new Date(timestamp).getTime()) / 60000)
+    }
+
     function fetchMessages(ticketId) {
         var data = {'ticket_id': ticketId};
         chatSocket.send(JSON.stringify({
@@ -130,11 +138,12 @@
         var author_id = data['author_id'];
         var msgListTag = document.createElement('li');
         {#var namePTag = document.createElement('p');#}
-        var timestampPTag = document.createElement('p');
+        var lineBreakTag = document.createElement('br');
+        var timestampPTag = document.createElement('small');
         var imgTag = document.createElement('img');
         var pTag = document.createElement('p');
         {#namePTag.textContent = data['author_username'];#}
-        timestampPTag.textContent = data['sent_at'];
+        timestampPTag.textContent = minutesAgo(data['sent_at']) + 'minutes ago';
         pTag.textContent = data['body'];
         imgTag.src = 'http://emilcarlsson.se/assets/mikeross.png';
 
@@ -147,6 +156,8 @@
         msgListTag.appendChild(timestampPTag);
         {#msgListTag.appendChild(namePTag);#}
         msgListTag.appendChild(imgTag);
+        pTag.appendChild(lineBreakTag);
+        pTag.appendChild(timestampPTag);
         msgListTag.appendChild(pTag);
         document.querySelector('#chat-log').appendChild(msgListTag);
     }
