@@ -51,11 +51,21 @@ class MessageViewSet(ModelViewSet):
         return Message.objects.filter(ticket=self.kwargs['ticket_pk'])
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        data = {
+            'author_id': self.request.data['author_id'],
+        }
+
+        if 'canned_message_id' in self.request.data:
+            canned_message = CannedMessage.objects.get(id=self.request.data['canned_message_id'])
+            data['body'] = canned_message.body;
+        else:
+            data['body'] = self.request.data['body']
+
+        serializer = self.get_serializer(data=data)
         if serializer.is_valid(raise_exception=True):
             ticket = Ticket.objects.get(id=kwargs['ticket_pk'])
             author = User.objects.get(id=self.request.data['author_id'])
-            serializer.save(author=author, ticket=ticket, body=self.request.data['body'])
+            serializer.save(author=author, ticket=ticket, body=data['body'])
             headers = self.get_success_headers(serializer.data)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

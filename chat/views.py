@@ -3,8 +3,8 @@ from django.utils.safestring import mark_safe
 
 import json
 
-from .models import Message, Ticket
-from .serializers import MessageSerializer, TicketSerializer
+from .models import CannedMessage, Ticket
+from .serializers import CannedMessageSerializer, TicketSerializer
 
 from django.shortcuts import render
 
@@ -43,37 +43,20 @@ def ticket(request, ticket_id):
     else:
         serializedTickets = []
 
+    canned_messages = CannedMessage.objects.all()
+    if tickets:
+        serializedCannedMessages = CannedMessageSerializer(canned_messages, many=True).data[:]
+    else:
+        serializedCannedMessages = []
+
     context = {
         'agent_first_name': agent.first_name,
         'agent_last_name': agent.last_name,
         'tickets': serializedTickets,
+        'canned_messages': serializedCannedMessages,
         'user_first_name': user.first_name,
         'user_last_name': user.last_name,
         'ticket_id_json': mark_safe(json.dumps(ticket_id)),
     }
 
     return render(request, 'chat/ticket.html', context)
-
-
-# def canned_message(request, ticket_id, canned_message_id):
-#     if request.method == 'POST':
-#
-#     agent = request.user
-#     ticket = Ticket.objects.get(id=ticket_id)
-#     user = User.objects.get(id=ticket.user_id)
-#     tickets = Ticket.objects.filter(agent_id=agent.id)
-#     if tickets:
-#         serializedTickets = TicketSerializer(tickets, many=True).data[:]
-#     else:
-#         serializedTickets = []
-#
-#     context = {
-#         'agent_first_name': agent.first_name,
-#         'agent_last_name': agent.last_name,
-#         'tickets': serializedTickets,
-#         'user_first_name': user.first_name,
-#         'user_last_name': user.last_name,
-#         'ticket_id_json': mark_safe(json.dumps(ticket_id)),
-#     }
-#
-#     return render(request, 'chat/ticket.html', context)

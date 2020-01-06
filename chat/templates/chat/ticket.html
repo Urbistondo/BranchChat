@@ -83,12 +83,9 @@
       </div>
       <div class="message-input">
           <div class="nav-pills">
-            <ul class="nav nav-pills">
-              <li><a href="#">Greet</a></li>
-              <li><a href="#">Apologize</a></li>
-              <li><a href="#">Wait</a></li>
-              <li><a href="#">Thank</a></li>
-            </ul>
+              {% for canned_message in canned_messages %}
+                   <button id="chat-canned-{{ canned_message.category }}" class="submit">{{ canned_message.category }}</button>
+              {% endfor %}
         </div>
         <div class="wrap">
         <input id="chat-message-input" type="text" placeholder="Write your message..." />
@@ -184,6 +181,7 @@
     }
 
     var ticketId = {{ ticket_id_json }};
+    var cannedMessages = {{ canned_messages }};
 
     var chatSocket = new ReconnectingWebSocket(
         'ws://' + window.location.host +
@@ -230,5 +228,18 @@
 
         messageInputDom.value = '';
     };
+
+    document.querySelector('#chat-canned-message-greeting').onclick = function(e) {
+        var message = {
+            'author_id': {{ user.id }},
+            'ticket_id': ticketId,
+            'canned_message_id': '934274a83dc84e9e9431e82ed9026461',
+        };
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'command': 'new_canned_message'
+        }));
+    };
 </script>
+</body>
 </html>
