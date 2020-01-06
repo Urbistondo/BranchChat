@@ -43,8 +43,8 @@ class Ticket(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=False)
     updated_at = models.DateTimeField(auto_now=True, null=False)
 
-    # def __str__(self):
-    #     return self.id
+    def __str__(self):
+        return self.id
 
 
 class Message(models.Model):
@@ -71,3 +71,6 @@ class CannedMessage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     body = models.TextField(max_length=500)
     category = models.TextField(max_length=140, choices=CATEGORY, default=CATEGORY.undetermined, null=False)
+
+    def __str__(self):
+        return '%s - %s' % (self.id, self.category)

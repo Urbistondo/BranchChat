@@ -188,7 +188,7 @@
         document.querySelector('#chat-log').appendChild(msgListTag);
     }
 
-    var ticketId = {{ ticket_id_json }};
+    var ticketId = {{ ticket_id }};
     {#var cannedMessages = {{ canned_messages }};#}
 
     var chatSocket = new ReconnectingWebSocket(

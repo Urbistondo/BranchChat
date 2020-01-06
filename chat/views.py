@@ -49,7 +49,7 @@ def ticket_view(request, ticket_id):
         'canned_messages': serialized_canned_messages,
         'user_first_name': user.first_name,
         'user_last_name': user.last_name,
-        'ticket_id_json': mark_safe(json.dumps(ticket_id)),
+        'ticket_id': mark_safe(json.dumps(ticket_id)),
     }
 
     return render(request, 'chat/ticket.html', context)
