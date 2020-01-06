@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 
-from chat.models import Message, Ticket
-from chat.serializers import MessageSerializer, TicketSerializer
+from chat.models import CannedMessage, Message, Ticket
+from chat.serializers import CannedMessageSerializer, MessageSerializer, TicketSerializer
 
 
 User = get_user_model()
@@ -56,6 +56,34 @@ class MessageViewSet(ModelViewSet):
             ticket = Ticket.objects.get(id=kwargs['ticket_pk'])
             author = User.objects.get(id=self.request.data['author_id'])
             serializer.save(author=author, ticket=ticket, body=self.request.data['body'])
+            headers = self.get_success_headers(serializer.data)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CannedMessageViewSet(FiltersMixin, ModelViewSet):
+    queryset = CannedMessage.objects.all()
+    serializer_class = CannedMessageSerializer
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('category', )
+    ordering = ('category',)
+
+    filter_mappings = {
+        'category': 'category',
+    }
+
+    def get_queryset(self):
+        if 'category' in self.kwargs:
+            return CannedMessage.objects.filter(category=self.kwargs['category'])
+        else:
+            return CannedMessage.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(category=self.request.data['category'], body=self.request.data['body'])
             headers = self.get_success_headers(serializer.data)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

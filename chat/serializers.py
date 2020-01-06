@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from .models import Ticket, Message
+from .models import CannedMessage, Message, Ticket
 
 
 User = get_user_model()
@@ -49,3 +49,14 @@ class MessageSerializer(serializers.ModelSerializer):
             'sent_at',
         )
         read_only_fields = ('id', 'author', 'body', 'ticket', 'sent_at')
+
+
+class CannedMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CannedMessage
+        fields = (
+            'id',
+            'body',
+            'category',
+        )
+        read_only_fields = ('id', )

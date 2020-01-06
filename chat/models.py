@@ -51,6 +51,16 @@ class Message(models.Model):
     # def __str__(self):
     #     return '%s - %s - %s' % (self.author, self.ticket, self.sent_at)
 
-    @staticmethod
-    def last_10_messages():
-        return Message.objects.order_by('-sent_at').all()[:10]
+
+class CannedMessage(models.Model):
+    CATEGORY = Choices(
+        ('undetermined', 'Undetermined'),
+        ('apology', 'Apologize'),
+        ('greeting', 'Greet'),
+        ('thank', 'Thank'),
+        ('wait', 'Wait'),
+    )
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    body = models.TextField(max_length=500)
+    category = models.TextField(max_length=140, choices=CATEGORY, default=CATEGORY.undetermined, null=False)

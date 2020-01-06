@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from chat.api.router import router, tickets_router
+from chat.api.router import canned_message_router, router, tickets_router
 from .views import dashboard, index, ticket
 # from .views import MessageCreateAPIView, MessageDetail, TicketDetail, TicketList, TicketMessageList
 
@@ -11,6 +11,7 @@ urlpatterns = [
     path('<str:ticket_id>', ticket, name='ticket'),
     path('api/chat/', include(router.urls)),
     path('api/chat/', include(tickets_router.urls)),
+    path('api/chat/', include(canned_message_router.urls)),
     # path('tickets', TicketList.as_view(), name='tickets_list'),
     # path('tickets/<str:id>', TicketDetail.as_view(), name='tickets_detail'),
     # path('tickets/<str:id>/messages', TicketMessageList.as_view(), name='tickets_messages'),
