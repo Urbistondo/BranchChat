@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from filters.mixins import FiltersMixin
 from rest_framework import filters, status
 from rest_framework.response import Response
@@ -42,6 +43,17 @@ class TicketViewSet(FiltersMixin, ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        if instance.status == Ticket.STATUS.resolved:
+            raise ValidationError('The status for a closed ticket cannot be modified')
+
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
 
 class MessageViewSet(ModelViewSet):

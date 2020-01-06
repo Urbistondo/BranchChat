@@ -34,13 +34,7 @@ class ChatConsumer(WebsocketConsumer):
             canned_message = CannedMessage.objects.get(id=data['message']['canned_message_id'])
             data['message']['body'] = canned_message.body;
             del data['message']['canned_message_id']
-            serializer = MessageSerializer(data=data['message'])
-            if serializer.is_valid(raise_exception=True):
-                ticket = Ticket.objects.get(id=data['message']['ticket_id'])
-                author = User.objects.get(id=data['message']['author_id'])
-                message = serializer.save(author=author, ticket=ticket, body=data['message']['body'])
-
-                self.send_chat_message(self.message_to_json(message))
+            self.new_message(data)
 
     def messages_to_json(self, messages):
         result = []
