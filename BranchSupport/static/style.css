@@ -103,17 +103,14 @@ body {
     margin-left: 4px;
   }
 }
-#frame #sidepanel #profile .wrap img.online {
+#frame #sidepanel #profile .wrap img.low {
   border: 2px solid #2ecc71;
 }
-#frame #sidepanel #profile .wrap img.away {
+#frame #sidepanel #profile .wrap img.medium {
   border: 2px solid #f1c40f;
 }
-#frame #sidepanel #profile .wrap img.busy {
+#frame #sidepanel #profile .wrap img.high {
   border: 2px solid #e74c3c;
-}
-#frame #sidepanel #profile .wrap img.offline {
-  border: 2px solid #95a5a6;
 }
 #frame #sidepanel #profile .wrap p {
   float: left;
@@ -236,29 +233,23 @@ body {
     display: none;
   }
 }
-#frame #sidepanel #profile .wrap #status-options ul li#status-online span.status-circle {
+#frame #sidepanel #profile .wrap #status-options ul li#status-low span.status-circle {
   background: #2ecc71;
 }
-#frame #sidepanel #profile .wrap #status-options ul li#status-online.active span.status-circle:before {
+#frame #sidepanel #profile .wrap #status-options ul li#status-low.active span.status-circle:before {
   border: 1px solid #2ecc71;
 }
-#frame #sidepanel #profile .wrap #status-options ul li#status-away span.status-circle {
+#frame #sidepanel #profile .wrap #status-options ul li#status-medium span.status-circle {
   background: #f1c40f;
 }
-#frame #sidepanel #profile .wrap #status-options ul li#status-away.active span.status-circle:before {
+#frame #sidepanel #profile .wrap #status-options ul li#status-medium.active span.status-circle:before {
   border: 1px solid #f1c40f;
 }
-#frame #sidepanel #profile .wrap #status-options ul li#status-busy span.status-circle {
+#frame #sidepanel #profile .wrap #status-options ul li#status-high span.status-circle {
   background: #e74c3c;
 }
-#frame #sidepanel #profile .wrap #status-options ul li#status-busy.active span.status-circle:before {
+#frame #sidepanel #profile .wrap #status-options ul li#status-high.active span.status-circle:before {
   border: 1px solid #e74c3c;
-}
-#frame #sidepanel #profile .wrap #status-options ul li#status-offline span.status-circle {
-  background: #95a5a6;
-}
-#frame #sidepanel #profile .wrap #status-options ul li#status-offline.active span.status-circle:before {
-  border: 1px solid #95a5a6;
 }
 #frame #sidepanel #profile .wrap #expanded {
   padding: 100px 0 0 0;
@@ -388,13 +379,13 @@ body {
   border: 2px solid #2c3e50;
   background: #95a5a6;
 }
-#frame #sidepanel #contacts ul li.contact .wrap span.online {
+#frame #sidepanel #contacts ul li.contact .wrap span.low {
   background: #2ecc71;
 }
-#frame #sidepanel #contacts ul li.contact .wrap span.away {
+#frame #sidepanel #contacts ul li.contact .wrap span.medium {
   background: #f1c40f;
 }
-#frame #sidepanel #contacts ul li.contact .wrap span.busy {
+#frame #sidepanel #contacts ul li.contact .wrap span.high {
   background: #e74c3c;
 }
 #frame #sidepanel #contacts ul li.contact .wrap img {

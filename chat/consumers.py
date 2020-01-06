@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from channels.generic.websocket import WebsocketConsumer
 import json
 
-from .models import CannedMessage, Message, Ticket
+from .models import CannedMessage, Ticket
 from .serializers import MessageSerializer
 
 
