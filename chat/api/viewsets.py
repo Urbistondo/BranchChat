@@ -35,7 +35,8 @@ class TicketViewSet(FiltersMixin, ModelViewSet):
         if serializer.is_valid(raise_exception=True):
 
             user = User.objects.get(id=self.request.data['user_id'])
-            serializer.save(user=user)
+            agent = User.objects.get(id=self.request.data['agent_id'])
+            serializer.save(user=user, subject=self.request.data['subject'], agent=agent)
             headers = self.get_success_headers(serializer.data)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
