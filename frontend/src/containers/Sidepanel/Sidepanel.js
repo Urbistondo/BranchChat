@@ -27,7 +27,7 @@ const Sidepanel = (props) => (
         </div>
         <div id="search">
             <label htmlFor=""><i className="fa fa-search" aria-hidden="true"></i></label>
-            <input type="text" placeholder="Search contacts..." />
+            <input type="text" placeholder="Search tickets..." />
         </div>
         <div id="contacts">
             <ul>

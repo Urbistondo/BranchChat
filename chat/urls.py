@@ -1,14 +1,14 @@
 from django.urls import include, path
 
 from chat.api.router import router, tickets_router
-from .views import index, ticket
+from .views import dashboard, index, ticket
 # from .views import MessageCreateAPIView, MessageDetail, TicketDetail, TicketList, TicketMessageList
 
 app_name = 'chat'
 
 urlpatterns = [
-    path('', index, name='index'),
-    path('<str:ticket_id>/', ticket, name='ticket'),
+    path('', dashboard, name='dashboard'),
+    path('<str:ticket_id>', ticket, name='ticket'),
     path('api/chat/', include(router.urls)),
     path('api/chat/', include(tickets_router.urls)),
     # path('tickets', TicketList.as_view(), name='tickets_list'),
