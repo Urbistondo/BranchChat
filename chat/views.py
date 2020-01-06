@@ -33,27 +33,20 @@ def dashboard(request):
     return render(request, 'chat/ticket_home.html', context)
 
 
-def ticket(request, ticket_id):
+def ticket_view(request, ticket_id):
     agent = request.user
     ticket = Ticket.objects.get(id=ticket_id)
     user = User.objects.get(id=ticket.user_id)
     tickets = Ticket.objects.filter(agent_id=agent.id)
-    if tickets:
-        serializedTickets = TicketSerializer(tickets, many=True).data[:]
-    else:
-        serializedTickets = []
-
+    serialized_tickets = TicketSerializer(tickets, many=True).data[:] if tickets else []
     canned_messages = CannedMessage.objects.all()
-    if tickets:
-        serializedCannedMessages = CannedMessageSerializer(canned_messages, many=True).data[:]
-    else:
-        serializedCannedMessages = []
+    serialized_canned_messages = CannedMessageSerializer(canned_messages, many=True).data[:] if canned_messages else []
 
     context = {
         'agent_first_name': agent.first_name,
         'agent_last_name': agent.last_name,
-        'tickets': serializedTickets,
-        'canned_messages': serializedCannedMessages,
+        'tickets': serialized_tickets,
+        'canned_messages': serialized_canned_messages,
         'user_first_name': user.first_name,
         'user_last_name': user.last_name,
         'ticket_id_json': mark_safe(json.dumps(ticket_id)),
